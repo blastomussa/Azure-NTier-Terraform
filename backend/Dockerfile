@@ -1,3 +1,4 @@
+# I NEED TO UPDATE GIT PATH THIS FOR NEW PROJECT
 # To build: docker build --no-cache -f Dockerfile . -t blastomussa/flaskappv2
 # To test image: docker run -d -p 5001:5000 blastomussa/flaskappv2
 # Import latest python3 docker image

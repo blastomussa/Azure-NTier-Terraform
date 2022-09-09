@@ -5,6 +5,8 @@ from flask import Flask, redirect, url_for, request, render_template, jsonify
 
 app = Flask(__name__)
 
+
+### IMPORTANT: Use ENV variables from Terraform to connect to MongoDB <<<<<<<<<<<<<<-----------https://acloudguru.com/blog/engineering/deploy-a-simple-application-in-azure-using-terraform
 # this needs to be a secure secret; create new CosmosDB instance to test
 CONNECTION_STRING = None
 DB_NAME = 'MongoDB-DB'
@@ -18,24 +20,27 @@ def success():
     p = pw['password']
     return render_template('success.html', shortcode=p)
 
-@app.route('/button',methods = ['GET','POST'])
+@app.route('/',methods = ['GET','POST'])
 def button():
     if request.method == 'GET':
         return render_template("button.html")
     elif request.method == 'POST':
+        user = request.headers.get('User-Agent')
+        ip = request.remote_addr()
+        t = datetime.now()
         user_data = {
             'ip': ip,
             'user': user,
             'time': time
         }
-        mongo(user_data)
+        #mongo(user_data)
         return redirect(url_for('success'))
 
 
 @app.route("/get_my_ip", methods=["GET"])
 def get_my_ip():
     user = request.headers.get('User-Agent')
-    ip = request.remote_addr
+    ip = request.remote_addr()
     t = datetime.now()
     time = t.strftime("%m/%d/%Y %H:%M:%S")
     json = {
