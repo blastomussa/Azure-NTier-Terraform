@@ -5,6 +5,8 @@ from datetime import datetime
 from flask import Flask, redirect, url_for, request, render_template, jsonify
 
 app = Flask(__name__)
+# this is the entry point for wsgi deployment
+application = app
 
 
 ### IMPORTANT: Use ENV variables from Terraform to connect to MongoDB <<<<<<<<<<<<<<-----------https://acloudguru.com/blog/engineering/deploy-a-simple-application-in-azure-using-terraform
@@ -75,4 +77,4 @@ def mongo(data):
     document_id = insert_document(collection, data)
 
 if __name__ == '__main__':
-   app.run(host='0.0.0.0')
+   app.run(host='0.0.0.0',port=80)
