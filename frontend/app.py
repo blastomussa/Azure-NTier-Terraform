@@ -13,7 +13,7 @@ COSMOS_ACC_NAME = getenv('COSMOS_ACC_NAME')
 PRIMARY_KEY = getenv('COSMOS_PRIMARY_KEY')
 DB_NAME = getenv('COSMOS_DB_NAME')
 # this might be how you construct the connection string; TEST THIS <<<<<<<<<<------------------------
-CONNECTION_STRING = "mongodb://" + COSMOS_ACC_NAME + ":" + PRIMARY_KEY + "@" + COSMOS_ACC_NAME + ".mongo.cosmos.azure.com:10255/?ssl=true\u0026replicaSet=globaldb\u0026retrywrites=false\u0026maxIdleTimeMS=120000\u0026appName=@" + COSMOS_ACC_NAME + "@"
+CONNECTION_STRING = "mongodb://" + str(COSMOS_ACC_NAME) + ":" + str(PRIMARY_KEY) + "@" + str(COSMOS_ACC_NAME) + ".mongo.cosmos.azure.com:10255/?ssl=true\u0026replicaSet=globaldb\u0026retrywrites=false\u0026maxIdleTimeMS=120000\u0026appName=@" + str(COSMOS_ACC_NAME) + "@"
 
 
 @app.route('/success')
@@ -30,8 +30,8 @@ def button():
         return render_template("button.html")
     elif request.method == 'POST':
         user = request.headers.get('User-Agent')
-        ip = request.remote_addr()
-        t = datetime.now()
+        ip = request.remote_addr
+        time = datetime.now()
         user_data = {
             'ip': ip,
             'user': user,
@@ -44,7 +44,7 @@ def button():
 @app.route("/get_my_ip", methods=["GET"])
 def get_my_ip():
     user = request.headers.get('User-Agent')
-    ip = request.remote_addr()
+    ip = request.remote_addr
     t = datetime.now()
     time = t.strftime("%m/%d/%Y %H:%M:%S")
     json = {

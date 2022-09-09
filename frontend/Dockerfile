@@ -9,7 +9,7 @@ RUN apt-get -y install git
 
 # Clone github repository
 RUN git clone https://github.com/blastomussa/AzureProjectF22.git /AzureProject/
-WORKDIR /AzureProject/backend
+WORKDIR /AzureProject/frontend
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 

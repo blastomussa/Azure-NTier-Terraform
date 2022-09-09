@@ -55,8 +55,8 @@ resource "azurerm_container_registry" "acr" {
 
 # Build Docker image for backend API with ACR task
 # THIS NEEDS TO BE TESTED
-resource "azurerm_container_registry_task" "task" {
-  name                  = "build-task"
+resource "azurerm_container_registry_task" "backendtask" {
+  name                  = "backend-task"
   container_registry_id = azurerm_container_registry.acr.id
   platform {
     os = "Linux"
@@ -73,11 +73,36 @@ resource "azurerm_container_registry_task" "task" {
 
 # Run the previously created task
 # THIS NEEDS TO BE TESTED
-resource "azurerm_container_registry_task_schedule_run_now" "build" {
-  container_registry_task_id = azurerm_container_registry_task.task.id
+resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
+  container_registry_task_id = azurerm_container_registry_task.backendtask.id
   depends_on = [azurerm_container_registry_task.task]
 }
 
+
+# Build Docker image for frontend API with ACR task
+# THIS NEEDS TO BE TESTED
+resource "azurerm_container_registry_task" "task" {
+  name                  = "build-task"
+  container_registry_id = azurerm_container_registry.acr.id
+  platform {
+    os = "Linux"
+  }
+  docker_step {
+    dockerfile_path      = "/frontend/Dockerfile" //this might need to be changed
+    context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
+    context_access_token = var.github_pat
+    image_names          = ["FrontendAPI:latest"]
+  }
+  depends_on = [azurerm_container_registry.acr]
+}
+
+
+# Run the previously created task
+# THIS NEEDS TO BE TESTED
+resource "azurerm_container_registry_task_schedule_run_now" "frontendbuild" {
+  container_registry_task_id = azurerm_container_registry_task.frontendtask.id
+  depends_on = [azurerm_container_registry_task.task]
+}
 
 # Create CosmosDB Account
 resource "azurerm_cosmosdb_account" "acc" {
