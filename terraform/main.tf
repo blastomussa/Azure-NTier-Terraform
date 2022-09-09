@@ -12,7 +12,7 @@ DONE(ish):
 
 TO DO:
   NSG
-  Azure Container Instance (w/ mongo ENV variables)
+  Azure Container Instance (w/ mongo ENV variables) testing
   App Service
   Application Gateway
   Any other networking components to route traffic correctly between tiers
