@@ -82,7 +82,6 @@ resource "azurerm_container_registry" "acr" {
 
 
 # Build Docker image for backend API with ACR task
-# THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task" "backendtask" {
   name                  = "backend-task"
   container_registry_id = azurerm_container_registry.acr.id
@@ -90,24 +89,27 @@ resource "azurerm_container_registry_task" "backendtask" {
     os = "Linux"
   }
   docker_step {
-    dockerfile_path      = "/backend/Dockerfile" //this might need to be changed
+    dockerfile_path      = "backend/Dockerfile" //this might need to be changed
     context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
     context_access_token = var.github_pat
-    image_names          = ["backend:latest"]
+    image_names          = ["backend:{{.Run.ID}}"]
+  }
+  source_trigger {
+    name           = "github-trigger"
+    events         = ["commit"]
+    repository_url = "https://github.com/blastomussa/AzureProjectF22"
+    source_type    = "Github"
+
+    authentication {
+      token = var.github_pat
+      token_type = "PAT"
+    }
   }
   depends_on = [azurerm_container_registry.acr]
 }
 
 
-# Run the previously created task
-# THIS NEEDS TO BE TESTED
-resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
-  container_registry_task_id = azurerm_container_registry_task.backendtask.id
-}
-
-
 # Build Docker image for frontend API with ACR task
-# THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task" "frontendtask" {
   name                  = "frontend-task"
   container_registry_id = azurerm_container_registry.acr.id
@@ -115,17 +117,33 @@ resource "azurerm_container_registry_task" "frontendtask" {
     os = "Linux"
   }
   docker_step {
-    dockerfile_path      = "/frontend/Dockerfile" //this might need to be changed
+    dockerfile_path      = "frontend/Dockerfile" //this might need to be changed
     context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
     context_access_token = var.github_pat
-    image_names          = ["frontend:latest"]
+    image_names          = ["frontend:{{.Run.ID}}"]
+  }
+  source_trigger {
+    name           = "github-trigger"
+    events         = ["commit"]
+    repository_url = "https://github.com/blastomussa/AzureProjectF22"
+    source_type    = "Github"
+
+    authentication {
+      token = var.github_pat
+      token_type = "PAT"
+    }
   }
   depends_on = [azurerm_container_registry.acr]
 }
 
 
 # Run the previously created task
-# THIS NEEDS TO BE TESTED
+resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
+  container_registry_task_id = azurerm_container_registry_task.backendtask.id
+}
+
+
+# Run the previously created task
 resource "azurerm_container_registry_task_schedule_run_now" "frontendbuild" {
   container_registry_task_id = azurerm_container_registry_task.frontendtask.id
 }
