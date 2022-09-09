@@ -8,14 +8,15 @@ DONE(ish):
   Azure Container Registry
     Task to rebuild new backend docker image with every commit to master branch
     Run task to create an initial Docker image for the backend API
+  Vnet and subnets
 
 TO DO:
-  vNet
+  NSG
   Azure Container Instance (w/ mongo ENV variables)
   App Service
   Application Gateway
   Any other networking components to route traffic correctly between tiers
-    (Private Link, DNS Zone)
+    (Private Link, DNS Zone, public ip?)
 
 */
 terraform {
@@ -43,6 +44,31 @@ resource "azurerm_resource_group" "rg" {
 }
 
 
+# Create Network Security Group
+
+
+# Create VNet and subnets
+resource "azurerm_virtual_network" "example" {
+  name                = var.vnet_name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  address_space       = ["10.0.0.0/16"]
+  subnet {
+    name           = "gateway"
+    address_prefix = "10.0.1.0/24"
+  }
+  subnet {
+    name           = "frontend"
+    address_prefix = "10.0.2.0/24"
+  }
+  subnet {
+    name           = "backend"
+    address_prefix = "10.0.3.0/24"
+  }
+  depends_on = [azurerm_resource_group.rg]
+}
+
+
 # Create Azure Container Registry
 resource "azurerm_container_registry" "acr" {
   name                = var.container_registry_name
@@ -50,6 +76,7 @@ resource "azurerm_container_registry" "acr" {
   location            = azurerm_resource_group.rg.location
   sku                 = "Basic"
   admin_enabled       = false
+  depends_on = [azurerm_resource_group.rg]
 }
 
 
@@ -75,7 +102,7 @@ resource "azurerm_container_registry_task" "backendtask" {
 # THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
   container_registry_task_id = azurerm_container_registry_task.backendtask.id
-  depends_on = [azurerm_container_registry_task.task]
+  depends_on = [azurerm_container_registry_task.backendtask]
 }
 
 
@@ -101,7 +128,7 @@ resource "azurerm_container_registry_task" "task" {
 # THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task_schedule_run_now" "frontendbuild" {
   container_registry_task_id = azurerm_container_registry_task.frontendtask.id
-  depends_on = [azurerm_container_registry_task.task]
+  depends_on = [azurerm_container_registry_task.frontendtask]
 }
 
 # Create CosmosDB Account
@@ -152,3 +179,10 @@ resource "azurerm_cosmosdb_mongo_collection" "coll" {
   }
   depends_on = [azurerm_cosmosdb_mongo_database.mongodb]
 }
+
+
+# Container Instance frontend
+
+# Application Gateway
+
+# App Service backend API

@@ -2,7 +2,7 @@
 /config.ini
 
 # macOS
-/.DS_Store
+.DS_Store
 */.DS.Store
 
 # Stuff I don't want pushed to github

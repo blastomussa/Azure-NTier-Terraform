@@ -18,7 +18,7 @@ CONNECTION_STRING = "mongodb://" + str(COSMOS_ACC_NAME) + ":" + str(PRIMARY_KEY)
 
 @app.route('/success')
 def success():
-    url = 'https://blastomussa.dev/generate/api/v1'
+    url = 'https://blastomussa.dev/generate/api/v1' #  API URL MIGHT BE FROM ENV VARIABLE TOO
     response = requests.get(url)
     pw =response.json()
     p = pw['password']
