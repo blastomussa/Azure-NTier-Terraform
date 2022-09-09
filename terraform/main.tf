@@ -19,11 +19,12 @@ TO DO:
     (Private Link, DNS Zone, public ip?)
 
 */
+# azurerm version 3.22 is required for newer resource types (task)
 terraform {
-  required_version = ">= 0.12.6"
+  required_version = ">= 1.2"
   required_providers {
     azurerm = {
-      version = "~> 2.53.0"
+      version = "~> 3.22.0"
     }
   }
 }
@@ -48,7 +49,7 @@ resource "azurerm_resource_group" "rg" {
 
 
 # Create VNet and subnets
-resource "azurerm_virtual_network" "example" {
+resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
@@ -102,14 +103,13 @@ resource "azurerm_container_registry_task" "backendtask" {
 # THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
   container_registry_task_id = azurerm_container_registry_task.backendtask.id
-  depends_on                 = [azurerm_container_registry_task.backendtask]
 }
 
 
 # Build Docker image for frontend API with ACR task
 # THIS NEEDS TO BE TESTED
-resource "azurerm_container_registry_task" "task" {
-  name                  = "build-task"
+resource "azurerm_container_registry_task" "frontendtask" {
+  name                  = "frontend-task"
   container_registry_id = azurerm_container_registry.acr.id
   platform {
     os = "Linux"
@@ -128,7 +128,6 @@ resource "azurerm_container_registry_task" "task" {
 # THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task_schedule_run_now" "frontendbuild" {
   container_registry_task_id = azurerm_container_registry_task.frontendtask.id
-  depends_on                 = [azurerm_container_registry_task.frontendtask]
 }
 
 # Create CosmosDB Account
@@ -161,7 +160,7 @@ resource "azurerm_cosmosdb_mongo_database" "mongodb" {
   resource_group_name = azurerm_cosmosdb_account.acc.resource_group_name
   account_name        = azurerm_cosmosdb_account.acc.name
   throughput          = 400
-  depends_on          = [azurerm_cosmosdb_mongo_database.acc]
+  depends_on          = [azurerm_cosmosdb_account.acc]
 }
 
 
