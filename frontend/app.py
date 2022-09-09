@@ -9,12 +9,11 @@ app = Flask(__name__)
 application = app
 
 
-### IMPORTANT: Use ENV variables from Terraform to connect to MongoDB <<<<<<<<<<<<<<-----------https://acloudguru.com/blog/engineering/deploy-a-simple-application-in-azure-using-terraform
-# use getenv to get variables set by terraform for COSMOS_ACC_NAME and PRIMARY_KEY
+# use getenv to get variables set by terraform to constuct CONNECTION_STRING
 COSMOS_ACC_NAME = getenv('COSMOS_ACC_NAME')
 PRIMARY_KEY = getenv('COSMOS_PRIMARY_KEY')
 DB_NAME = getenv('COSMOS_DB_NAME')
-# this might be how you construct the connection string; TEST THIS <<<<<<<<<<------------------------
+COLLECTION_NAME = getenv('COSMOS_COLL_NAME')
 CONNECTION_STRING = "mongodb://" + str(COSMOS_ACC_NAME) + ":" + str(PRIMARY_KEY) + "@" + str(COSMOS_ACC_NAME) + ".mongo.cosmos.azure.com:10255/?ssl=true\u0026replicaSet=globaldb\u0026retrywrites=false\u0026maxIdleTimeMS=120000\u0026appName=@" + str(COSMOS_ACC_NAME) + "@"
 
 
@@ -73,7 +72,7 @@ def mongo(data):
 
     db = client[DB_NAME]
 
-    collection = db.COLLECTION_NAME
+    collection = db.test_collection  ### THIS IS FUCKING UP; how do i use variable
     document_id = insert_document(collection, data)
 
 if __name__ == '__main__':
