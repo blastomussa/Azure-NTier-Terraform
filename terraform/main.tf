@@ -76,7 +76,7 @@ resource "azurerm_container_registry" "acr" {
   location            = azurerm_resource_group.rg.location
   sku                 = "Basic"
   admin_enabled       = false
-  depends_on = [azurerm_resource_group.rg]
+  depends_on          = [azurerm_resource_group.rg]
 }
 
 
@@ -102,7 +102,7 @@ resource "azurerm_container_registry_task" "backendtask" {
 # THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
   container_registry_task_id = azurerm_container_registry_task.backendtask.id
-  depends_on = [azurerm_container_registry_task.backendtask]
+  depends_on                 = [azurerm_container_registry_task.backendtask]
 }
 
 
@@ -128,7 +128,7 @@ resource "azurerm_container_registry_task" "task" {
 # THIS NEEDS TO BE TESTED
 resource "azurerm_container_registry_task_schedule_run_now" "frontendbuild" {
   container_registry_task_id = azurerm_container_registry_task.frontendtask.id
-  depends_on = [azurerm_container_registry_task.frontendtask]
+  depends_on                 = [azurerm_container_registry_task.frontendtask]
 }
 
 # Create CosmosDB Account
@@ -161,7 +161,7 @@ resource "azurerm_cosmosdb_mongo_database" "mongodb" {
   resource_group_name = azurerm_cosmosdb_account.acc.resource_group_name
   account_name        = azurerm_cosmosdb_account.acc.name
   throughput          = 400
-  depends_on = [azurerm_cosmosdb_mongo_database.acc]
+  depends_on          = [azurerm_cosmosdb_mongo_database.acc]
 }
 
 
