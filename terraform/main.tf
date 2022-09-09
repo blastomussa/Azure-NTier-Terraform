@@ -7,7 +7,7 @@ DONE(ish):
     Database + Collection
   Azure Container Registry
     Task to rebuild new backend docker image with every commit to master branch
-    Run task to create an initial Docker image for the backend API
+    Run task to create initial Docker images for the backend and frontend
   Vnet and subnets
 
 TO DO:
@@ -93,7 +93,7 @@ resource "azurerm_container_registry_task" "backendtask" {
     dockerfile_path      = "/backend/Dockerfile" //this might need to be changed
     context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
     context_access_token = var.github_pat
-    image_names          = ["BackendAPI:latest"]
+    image_names          = ["backend:latest"]
   }
   depends_on = [azurerm_container_registry.acr]
 }
@@ -118,7 +118,7 @@ resource "azurerm_container_registry_task" "frontendtask" {
     dockerfile_path      = "/frontend/Dockerfile" //this might need to be changed
     context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
     context_access_token = var.github_pat
-    image_names          = ["FrontendAPI:latest"]
+    image_names          = ["frontend:latest"]
   }
   depends_on = [azurerm_container_registry.acr]
 }
