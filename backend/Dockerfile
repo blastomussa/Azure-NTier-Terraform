@@ -1,4 +1,4 @@
-# I NEED TO UPDATE GIT PATH THIS FOR NEW PROJECT
+# I NEED TO RETEST THIS FOR NEW GIT PROJECT
 # To build: docker build --no-cache -f Dockerfile . -t blastomussa/flaskappv2
 # To test image: docker run -d -p 5001:5000 blastomussa/flaskappv2
 # Import latest python3 docker image
@@ -9,8 +9,8 @@ RUN apt-get -y update
 RUN apt-get -y install git
 
 # Clone github repository
-RUN git clone https://github.com/blastomussa/Password-Generator-Api.git /generator/
-WORKDIR /generator
+RUN git clone https://github.com/blastomussa/AzureProjectF22.git /AzureProject/
+WORKDIR /AzureProject/backend
 
 RUN pip3 install --no-cache-dir -r requirements.txt
 

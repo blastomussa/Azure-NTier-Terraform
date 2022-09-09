@@ -1,3 +1,21 @@
+/*
+The goal of this project is to deploy as many resources as possible with terraform
+
+DONE(ish):
+  Resource Group
+  CosmosDB Account
+    Database + Collection
+
+TO DO:
+  vNet
+  Azure Container Instance (w/ mongo ENV variables)
+  App Service
+  Azure Container Registry?
+  Application Gateway
+  Any other networking components to route traffic correctly between tiers
+    (Private Link, DNS Zone)
+
+*/
 terraform {
   required_version = ">= 0.12.6"
   required_providers {
@@ -31,7 +49,7 @@ resource "azurerm_cosmosdb_account" "acc" {
   offer_type                = "Standard"
   kind                      = "MongoDB"
   enable_automatic_failover = false
-	enable_free_tier          = true
+  enable_free_tier          = true
   capabilities {
     name = "EnableMongo"
   }
@@ -39,10 +57,10 @@ resource "azurerm_cosmosdb_account" "acc" {
     consistency_level       = "BoundedStaleness"
     max_interval_in_seconds = 400
     max_staleness_prefix    = 200000
-	}
+  }
   geo_location {
-    location                = var.resource_group_location
-    failover_priority       = 0
+    location          = var.resource_group_location
+    failover_priority = 0
   }
 }
 
@@ -69,9 +87,4 @@ resource "azurerm_cosmosdb_mongo_collection" "coll" {
     ignore_changes = [index]
   }
   depends_on = [azurerm_cosmosdb_mongo_database.mongodb]
-}
-
-# Output connection string for MongoDB
-output "connectionString" {
-  value = azurerm_cosmosdb_account.acc.connection_strings
 }
