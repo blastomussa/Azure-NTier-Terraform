@@ -13,6 +13,7 @@ tests/*
 terraform/variables.tf
 */.terraform*
 */terraform.*
+terraform.tfvars
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

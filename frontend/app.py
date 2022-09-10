@@ -38,7 +38,7 @@ def button():
             'user': user,
             'time': time
         }
-        mongo(user_data)     ######TESTING THIS
+        mongo(user_data)     ######WORKS BUT NEEDS BETTER DATA
         return redirect(url_for('success'))
 
 
@@ -72,7 +72,7 @@ def mongo(data):
 
     db = client[DB_NAME]
 
-    collection = db.test_collection  ### THIS IS FUCKING UP; how do i use variable
+    collection = db.test_collection  ### how do i use variable after dot(.)
     document_id = insert_document(collection, data)
 
 if __name__ == '__main__':
