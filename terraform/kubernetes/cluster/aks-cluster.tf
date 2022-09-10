@@ -7,6 +7,8 @@ terraform {
   }
 }
 
+resource "random_pet" "prefix" {}
+
 # Azure Resource Manager provider
 provider "azurerm" {
   features {}
@@ -39,8 +41,4 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   }
 
   role_based_access_control_enabled = true
-
-  tags = {
-    environment = "Demo"
-  }
 }

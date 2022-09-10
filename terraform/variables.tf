@@ -1,5 +1,9 @@
 variable "subscription_id" {
-  default = "****************************"
+  description = "Subscription ID of Azure Tenant"
+}
+
+variable "github_pat" {
+  description = "Github PAT scoped for access to public repos and repo status"
 }
 
 variable "resource_group_name" {
@@ -19,15 +23,11 @@ variable "cosmos_db_database_name" {
 }
 
 variable "cosmos_db_collection_name" {
-  default = "test-collection"
+  default = "test_collection"
 }
 
 variable "container_registry_name" {
   default = "testcontainer12359"
-}
-
-variable "github_pat" {
-  default = "***************************"
 }
 
 variable "vnet_name" {
@@ -35,5 +35,5 @@ variable "vnet_name" {
 }
 
 variable "aci_name" {
-  default = "frontend_test"
+  default = "frontend-app"
 }

@@ -10,10 +10,10 @@ tests/*
 /test.py
 
 # terraform
-terraform/variables.tf
 */.terraform*
 */terraform.*
-terraform.tfvars
+terraform.*
+*.terraform.*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

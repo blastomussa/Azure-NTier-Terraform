@@ -60,7 +60,7 @@ resource "azurerm_subnet" "frontend" {
   delegation {
     name = "delegation"
 
-    service_delegation {    //Container Instance REQUIRES delegation
+    service_delegation { //Container Instance REQUIRES delegation
       name    = "Microsoft.ContainerInstance/containerGroups"
       actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
     }
@@ -292,7 +292,6 @@ resource "azurerm_cosmosdb_mongo_collection" "coll" {
   account_name        = azurerm_cosmosdb_account.acc.name
   database_name       = azurerm_cosmosdb_mongo_database.mongodb.name
   default_ttl_seconds = "777"
-  shard_key           = "uniqueKey"
   throughput          = 400
   index {
     keys   = ["_id"]
@@ -301,7 +300,7 @@ resource "azurerm_cosmosdb_mongo_collection" "coll" {
   depends_on = [azurerm_cosmosdb_mongo_database.mongodb]
 }
 
-
+# Image name needs to be dynamic
 # Azure Container Instance
 resource "azurerm_container_group" "frontend" {
   name                = var.aci_name
@@ -320,7 +319,7 @@ resource "azurerm_container_group" "frontend" {
 
   container {
     name   = "frontend-app"
-    image  = "testcontainer12359.azurecr.io/frontend:ca1" # THIS NEEDS TO BE DYNAMIC!!!!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    image  = "testcontainer12359.azurecr.io/frontend:ca2" # THIS NEEDS TO BE DYNAMIC!!!!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FIX THIS
     cpu    = "0.5"
     memory = "1.5"
 
