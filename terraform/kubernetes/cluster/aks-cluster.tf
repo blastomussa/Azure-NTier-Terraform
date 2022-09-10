@@ -22,7 +22,7 @@ resource "azurerm_resource_group" "rg" {
   location = var.resource_group_location
 }
 
-resource "azurerm_kubernetes_cluster" "k8s" {
+resource "azurerm_kubernetes_cluster" "cluster" {
   name                = "${random_pet.prefix.id}-aks"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
