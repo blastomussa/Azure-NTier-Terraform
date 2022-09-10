@@ -1,0 +1,39 @@
+variable "subscription_id" {
+  default = "****************************"
+}
+
+variable "resource_group_name" {
+  default = "tfCosmos-RG"
+}
+
+variable "resource_group_location" {
+  default = "eastus"
+}
+
+variable "cosmos_db_account_name" {
+  default = "tf-cosmos-jcourtney"
+}
+
+variable "cosmos_db_database_name" {
+  default = "test-db"
+}
+
+variable "cosmos_db_collection_name" {
+  default = "test-collection"
+}
+
+variable "container_registry_name" {
+  default = "testcontainer12359"
+}
+
+variable "github_pat" {
+  default = "***************************"
+}
+
+variable "vnet_name" {
+  default = "test-vnet"
+}
+
+variable "aci_name" {
+  default = "frontend_test"
+}
