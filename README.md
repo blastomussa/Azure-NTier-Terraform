@@ -1,9 +1,10 @@
 # Azure Project for UML - MSIT 5650: Cloud Computing F22
 
-Project repository for Cloud Computing Azure project. N-tier application
-consisting of a Flask API Docker backend running in an Azure
-Container instance and a Flask front end running in an App Service. Planned
-infrastructure includes App Service, Azure Container Instance, Application Gateway
-with WAF enabled, CosmosDB, and Azure Container Registry.
+Project repository for Azure project. N-tier application consisting of an AKS
+backend, a Flask frontend container instance, an application gateway, a
+CosmosDB MongoDB database and an Azure Container registry.
+
+Container images are built automatically on deployment with an ACR task, which is 
+also triggered after every commit to this repositories master branch.
 
 The goal of this project is to deploy as many resources as possible with terraform.
