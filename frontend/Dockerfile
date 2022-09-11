@@ -1,5 +1,3 @@
-# I NEED TO RETEST THIS FOR NEW PROJECT
-# Should be built by Azure Container Registry Task and uploaded to ACR by terraform
 # Import latest python3 docker image
 FROM python:3.8-slim-bullseye
 
@@ -14,7 +12,6 @@ WORKDIR /AzureProject/frontend
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Expose the required port
-EXPOSE 5000
+EXPOSE 80
 
-# Must forward port when running container
 CMD [ "python3", "./app.py" ]
