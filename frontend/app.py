@@ -24,37 +24,23 @@ def success():
     response = requests.get(url)
     pw =response.json()
     p = pw['password']
+    client = request.headers.get('User-Agent')
+    time = datetime.now()
+    user_data = {
+        'pw': p,
+        'client': user,
+        'time': str(time),
+    }
+    mongo(user_data)
     return render_template('success.html', shortcode=p)
+
 
 @app.route('/',methods = ['GET','POST'])
 def button():
     if request.method == 'GET':
         return render_template("button.html")
     elif request.method == 'POST':
-        user = request.headers.get('User-Agent')
-        ip = request.remote_addr
-        time = datetime.now()
-        user_data = {
-            'ip': ip,
-            'user': user,
-            'time': time
-        }
-        mongo(user_data)     ######WORKS BUT NEEDS BETTER DATA
         return redirect(url_for('success'))
-
-
-@app.route("/get_my_ip", methods=["GET"])
-def get_my_ip():
-    user = request.headers.get('User-Agent')
-    ip = request.remote_addr
-    t = datetime.now()
-    time = t.strftime("%m/%d/%Y %H:%M:%S")
-    json = {
-        'ip': ip,
-        'user': user,
-        'time': time
-    }
-    return jsonify(json),200
 
 
 def insert_document(collection, data):

@@ -66,7 +66,7 @@ resource "azurerm_subnet" "frontend" {
 
     service_delegation { //Container Instance REQUIRES delegation
       name    = "Microsoft.ContainerInstance/containerGroups"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
+      actions = ["Microsoft.Network/virtualNetworks/subnets/action", "Microsoft.Network/virtualNetworks/subnets/join/action", "Microsoft.Network/virtualNetworks/subnets/prepareNetworkPolicies/action"]
     }
   }
   depends_on = [azurerm_virtual_network.vnet]
@@ -343,7 +343,7 @@ resource "azurerm_kubernetes_cluster" "cluster" {
 
 # Kubernetes provider credentials
 provider "kubernetes" {
-  host = azurerm_kubernetes_cluster.cluster.kube_config.0.host
+  host                   = azurerm_kubernetes_cluster.cluster.kube_config.0.host
   client_certificate     = base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.client_certificate)
   client_key             = base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.client_key)
   cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.cluster.kube_config.0.cluster_ca_certificate)
@@ -453,8 +453,9 @@ resource "azurerm_container_group" "frontend" {
       failure_threshold     = 2
 
       http_get {
-        path = "/"
-        port = 80
+        path   = "/"
+        port   = 80
+        scheme = "Http"
       }
     }
 
