@@ -6,7 +6,7 @@ RUN apt-get -y update
 RUN apt-get -y install git
 
 # Clone github repository
-RUN git clone https://github.com/blastomussa/Azure-Terraform-F22.git /AzureProject/
+RUN git clone https://github.com/blastomussa/Azure-NTier-Terraform.git /AzureProject/
 WORKDIR /AzureProject/backend
 
 # Install Python dependencies
