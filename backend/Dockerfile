@@ -1,6 +1,4 @@
-# I NEED TO RETEST THIS FOR NEW PROJECT
-# Should be built by Azure Container Registry Task and uploaded to ACR by terraform
-# Import latest python3 docker image
+# Import python:3.8 slim docker image
 FROM python:3.8-slim-bullseye
 
 # Install git
@@ -11,10 +9,10 @@ RUN apt-get -y install git
 RUN git clone https://github.com/blastomussa/AzureProjectF22.git /AzureProject/
 WORKDIR /AzureProject/backend
 
+# Install Python dependencies
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Expose the required port
-EXPOSE 5000
+EXPOSE 80
 
-# Must forward port when running container
 CMD [ "python3", "./app.py" ]
