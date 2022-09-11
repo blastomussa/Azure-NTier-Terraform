@@ -196,14 +196,14 @@ resource "azurerm_container_registry_task" "backendtask" {
   }
   docker_step {
     dockerfile_path      = "backend/Dockerfile"
-    context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
+    context_path         = "https://github.com/blastomussa/Azure-Terraform-F22.git#master"
     context_access_token = var.github_pat
     image_names          = ["backend:{{.Run.ID}}"]
   }
   source_trigger {
     name           = "github-trigger"
     events         = ["commit"]
-    repository_url = "https://github.com/blastomussa/AzureProjectF22"
+    repository_url = "https://github.com/blastomussa/Azure-Terraform-F22"
     source_type    = "Github"
 
     authentication {
@@ -231,14 +231,14 @@ resource "azurerm_container_registry_task" "frontendtask" {
   }
   docker_step {
     dockerfile_path      = "frontend/Dockerfile" //this might need to be changed
-    context_path         = "https://github.com/blastomussa/AzureProjectF22.git#master"
+    context_path         = "https://github.com/blastomussa/Azure-Terraform-F22.git#master"
     context_access_token = var.github_pat
     image_names          = ["frontend:{{.Run.ID}}"]
   }
   source_trigger {
     name           = "github-trigger"
     events         = ["commit"]
-    repository_url = "https://github.com/blastomussa/AzureProjectF22"
+    repository_url = "https://github.com/blastomussa/Azure-Terraform-F22"
     source_type    = "Github"
 
     authentication {
