@@ -22,7 +22,10 @@ variable "github_pat" {
   description = "Github PAT scoped for access to public repos and repo status"
 }
 
-#NOT NEEDED AFTER PULL TEST
 variable "container_registry_name" {
   default = "testcontainer12359"
+}
+
+variable "vnet_name" {
+  default = "test-vnet"
 }

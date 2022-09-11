@@ -6,6 +6,14 @@ variable "github_pat" {
   description = "Github PAT scoped for access to public repos and repo status"
 }
 
+variable "appId" {
+  description = "Azure Kubernetes Service Cluster service principal"
+}
+
+variable "password" {
+  description = "Azure Kubernetes Service Cluster password"
+}
+
 variable "resource_group_name" {
   default = "tfCosmos-RG"
 }

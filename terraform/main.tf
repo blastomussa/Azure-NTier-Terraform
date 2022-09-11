@@ -4,6 +4,10 @@ terraform {
     azurerm = {
       version = "~> 3.22.0"
     }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = ">= 2.0.1"
+    }
   }
 }
 
@@ -211,6 +215,13 @@ resource "azurerm_container_registry_task" "backendtask" {
 }
 
 
+# Run the backendtask manually
+resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
+  container_registry_task_id = azurerm_container_registry_task.backendtask.id
+}
+
+
+
 # Build Docker image for frontend API with ACR task
 resource "azurerm_container_registry_task" "frontendtask" {
   name                  = "frontend-task"
@@ -239,15 +250,10 @@ resource "azurerm_container_registry_task" "frontendtask" {
 }
 
 
-# Run the backendtask manually
-resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
-  container_registry_task_id = azurerm_container_registry_task.backendtask.id
-}
-
-
 # Run the frontendtask manually
 resource "azurerm_container_registry_task_schedule_run_now" "frontendbuild" {
   container_registry_task_id = azurerm_container_registry_task.frontendtask.id
+  depends_on                 = [azurerm_container_registry_task_schedule_run_now.backendbuild]
 }
 
 
@@ -300,6 +306,119 @@ resource "azurerm_cosmosdb_mongo_collection" "coll" {
   depends_on = [azurerm_cosmosdb_mongo_database.mongodb]
 }
 
+
+# random generation of aks cluster name
+resource "random_pet" "prefix" {}
+
+
+# After completeion run the following command to connect kubectl to cluster
+# az aks get-credentials --resource-group $(terraform output -raw resource_group_name) --name $(terraform output -raw kubernetes_cluster_name)
+# Azure Kubernetes cluster
+resource "azurerm_kubernetes_cluster" "cluster" {
+  name                = "${random_pet.prefix.id}-aks"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  dns_prefix          = "${random_pet.prefix.id}-k8s"
+
+  default_node_pool {
+    name       = "default"
+    node_count = 1
+    vm_size    = "Standard_D2_v2"
+  }
+
+  service_principal {
+    client_id     = var.appId
+    client_secret = var.password
+  }
+
+  network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
+
+  }
+
+  role_based_access_control_enabled = true
+}
+
+
+# Kubernetes provider credentials
+provider "kubernetes" {
+  host = azurerm_kubernetes_cluster.cluster.kube_config.0.host
+  client_certificate     = azurerm_kubernetes_cluster.cluster.kube_config.0.client_certificate
+  client_key             = azurerm_kubernetes_cluster.cluster.kube_config.0.client_key
+  cluster_ca_certificate = azurerm_kubernetes_cluster.cluster.kube_config.0.cluster_ca_certificate
+}
+
+
+# Kubernetes Deployment
+resource "kubernetes_deployment" "api" {
+  metadata {
+    name = "flask-api"
+    labels = {
+      App = "FlaskAPI"
+    }
+  }
+
+  spec {
+    replicas = 2
+    selector {
+      match_labels = {
+        App = "FlaskAPI"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          App = "FlaskAPI"
+        }
+      }
+      spec {
+        container {
+          image = "testcontainer12359.azurecr.io/backend:ca1" #<<<<<<<<<<<<<<<<<<<-----------THIS NEEDS TO BE DYNAMIC
+          name  = "api"
+
+          port {
+            container_port = 80
+          }
+
+          resources {
+            limits = {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests = {
+              cpu    = "250m"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+  depends_on = [azurerm_kubernetes_cluster.cluster]
+}
+
+
+# Kubernetes Service
+resource "kubernetes_service" "api" {
+  metadata {
+    name = "flask-api"
+  }
+  spec {
+    selector = {
+      App = kubernetes_deployment.api.spec.0.template.0.metadata[0].labels.App
+    }
+    port {
+      port        = 80
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+  depends_on = [kubernetes_deployment.api]
+}
+
+
 # Image name needs to be dynamic
 # Azure Container Instance
 resource "azurerm_container_group" "frontend" {
@@ -344,10 +463,11 @@ resource "azurerm_container_group" "frontend" {
       COSMOS_ACC_NAME  = azurerm_cosmosdb_account.acc.name,
       COSMOS_DB_NAME   = var.cosmos_db_database_name
       COSMOS_COLL_NAME = var.cosmos_db_collection_name
+      API_IP           = kubernetes_service.api.status.0.load_balancer.0.ingress.0.ip
     })
     secure_environment_variables = ({
       COSMOS_PRIMARY_KEY = azurerm_cosmosdb_account.acc.primary_key
     })
   }
-  depends_on = [azurerm_container_registry_task_schedule_run_now.frontendbuild, azurerm_cosmosdb_account.acc, azurerm_network_profile.frontendprofile]
+  depends_on = [azurerm_container_registry_task_schedule_run_now.frontendbuild, azurerm_cosmosdb_account.acc, azurerm_network_profile.frontendprofile, kubernetes_service.api]
 }

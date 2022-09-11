@@ -24,7 +24,6 @@ resource "azurerm_resource_group" "rg" {
   location = var.resource_group_location
 }
 
-
 # Create Azure Container Registry
 resource "azurerm_container_registry" "acr" {
   name                = var.container_registry_name
@@ -69,6 +68,26 @@ resource "azurerm_container_registry_task_schedule_run_now" "backendbuild" {
 }
 
 
+# Create VNet and subnets
+resource "azurerm_virtual_network" "vnet" {
+  name                = var.vnet_name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  address_space       = ["10.0.0.0/8"]
+  depends_on          = [azurerm_resource_group.rg]
+}
+
+resource "azurerm_subnet" "backend" {
+  name                 = "backend"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.1.0.0/16"] # REQUIRED CIDR for aks
+  depends_on           = [azurerm_virtual_network.vnet]
+}
+
+
+
+# trying to get this to work for private IP address
 resource "azurerm_kubernetes_cluster" "cluster" {
   name                = "${random_pet.prefix.id}-aks"
   location            = azurerm_resource_group.rg.location
@@ -79,14 +98,18 @@ resource "azurerm_kubernetes_cluster" "cluster" {
     name            = "default"
     node_count      = 2
     vm_size         = "Standard_D2_v2"
-    os_disk_size_gb = 30
+		vnet_subnet_id = azurerm_subnet.backend.id # iDK if this work
   }
 
   service_principal {
-    client_id     = var.appId
-    client_secret = var.password
+    client_id      = var.appId
+    client_secret  = var.password
   }
 
+	network_profile {
+    network_plugin    = "azure"
+    load_balancer_sku = "standard"
+  }
 
   role_based_access_control_enabled = true
 }

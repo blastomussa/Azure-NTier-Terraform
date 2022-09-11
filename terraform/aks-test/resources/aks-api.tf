@@ -1,7 +1,4 @@
-# https://learn.hashicorp.com/tutorials/terraform/kubernetes-provider?in=terraform/kubernetes
-# https://github.com/hashicorp/learn-terraform-deploy-nginx-kubernetes-provider/blob/aks/kubernetes.tf
-# how do I deploy custom docker image via Azure Container Registry; service principal?
-
+# THIS WORKS!!!
 terraform {
   required_providers {
     azurerm = {
@@ -45,11 +42,11 @@ provider "kubernetes" {
 
 
 # DEPLOYMENT
-resource "kubernetes_deployment" "nginx" {
+resource "kubernetes_deployment" "api" {
   metadata {
-    name = "scalable-nginx-example"
+    name = "flask-api"
     labels = {
-      App = "ScalableNginxExample"
+      App = "FlaskAPI"
     }
   }
 
@@ -57,22 +54,22 @@ resource "kubernetes_deployment" "nginx" {
     replicas = 2
     selector {
       match_labels = {
-        App = "ScalableNginxExample"
+        App = "FlaskAPI"
       }
     }
     template {
       metadata {
         labels = {
-          App = "ScalableNginxExample"
+          App = "FlaskAPI"
         }
       }
       spec {
         container {
-          image = "testcontainer12359.azurecr.io/backend:ca1"
-          name  = "example"
+          image = "testcontainer12359.azurecr.io/backend:ca1" #<<<<<<<<<<<<<<<<<<<-----------THIS NEEDS TO BE DYNAMIC
+          name  = "api"
 
           port {
-            container_port = 5000
+            container_port = 80
           }
 
           resources {
@@ -93,16 +90,16 @@ resource "kubernetes_deployment" "nginx" {
 
 
 # Expose pod with service
-resource "kubernetes_service" "nginx" {
+resource "kubernetes_service" "api" {
   metadata {
-    name = "nginx-example"
+    name = "flask-api"
   }
   spec {
     selector = {
-      App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
+      App = kubernetes_deployment.api.spec.0.template.0.metadata[0].labels.App
     }
     port {
-      port        = 5000
+      port        = 80
       target_port = 80
     }
 
@@ -111,5 +108,5 @@ resource "kubernetes_service" "nginx" {
 }
 
 output "lb_ip" {
-  value = kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip
+  value = kubernetes_service.api.status.0.load_balancer.0.ingress.0.ip
 }
