@@ -20,7 +20,7 @@ data "terraform_remote_state" "aks" {
   backend = "local"
 
   config = {
-    path = "../cluster/terraform.tfstate.backup"
+    path = "../cluster/terraform.tfstate"
   }
 }
 
@@ -68,11 +68,11 @@ resource "kubernetes_deployment" "nginx" {
       }
       spec {
         container {
-          image = "nginx:1.7.8"
+          image = "testcontainer12359.azurecr.io/backend:ca1"
           name  = "example"
 
           port {
-            container_port = 80
+            container_port = 5000
           }
 
           resources {
@@ -89,4 +89,27 @@ resource "kubernetes_deployment" "nginx" {
       }
     }
   }
+}
+
+
+# Expose pod with service
+resource "kubernetes_service" "nginx" {
+  metadata {
+    name = "nginx-example"
+  }
+  spec {
+    selector = {
+      App = kubernetes_deployment.nginx.spec.0.template.0.metadata[0].labels.App
+    }
+    port {
+      port        = 5000
+      target_port = 80
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
+output "lb_ip" {
+  value = kubernetes_service.nginx.status.0.load_balancer.0.ingress.0.ip
 }

@@ -177,4 +177,4 @@ def gibberish(string):
 
 # host='0.0.0.0' required to run inside docker image
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0',port=80)
