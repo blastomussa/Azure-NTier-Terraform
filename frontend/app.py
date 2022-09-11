@@ -16,11 +16,11 @@ DB_NAME = getenv('COSMOS_DB_NAME')
 COLLECTION_NAME = getenv('COSMOS_COLL_NAME')
 CONNECTION_STRING = "mongodb://" + str(COSMOS_ACC_NAME) + ":" + str(PRIMARY_KEY) + "@" + str(COSMOS_ACC_NAME) + ".mongo.cosmos.azure.com:10255/?ssl=true\u0026replicaSet=globaldb\u0026retrywrites=false\u0026maxIdleTimeMS=120000\u0026appName=@" + str(COSMOS_ACC_NAME) + "@"
 API_IP = getenv('API_IP')
-API_URL = str(API_IP) + '/api/v1'
+API_URL = 'http://' + str(API_IP) + '/api/v1'
 
 @app.route('/success')
 def success():
-    url = API_URL 
+    url = API_URL
     response = requests.get(url)
     pw =response.json()
     p = pw['password']
