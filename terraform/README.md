@@ -12,3 +12,4 @@ github_pat      = "***********************************"
 appId           = "***********************************"
 password        = "***********************************"
 ```
+![Azure Architecture](https://github.com/blastomussa/Azure-NTier-Terraform/blob/master/diagram/azure-architecture.png)
