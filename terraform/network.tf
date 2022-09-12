@@ -10,7 +10,7 @@ resource "azurerm_virtual_network" "vnet" {
 
 # Subnet for Application Gateway
 resource "azurerm_subnet" "gateway" {
-  name                 = "gateway"
+  name                 = "gateway-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
@@ -18,9 +18,9 @@ resource "azurerm_subnet" "gateway" {
 }
 
 
-# Subnet for Azure Container Instance 
+# Subnet for Azure Container Instance
 resource "azurerm_subnet" "frontend" {
-  name                 = "frontend"
+  name                 = "frontend-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.2.0/24"]

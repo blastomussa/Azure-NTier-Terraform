@@ -9,3 +9,6 @@ Container images are built automatically on deployment with an ACR task, which i
 also triggered after every commit to this repositories master branch.
 
 The goal of this project is to deploy as many resources as possible with terraform.
+
+
+![Azure Architecture]()

@@ -38,7 +38,7 @@ def success():
 @app.route('/',methods = ['GET','POST'])
 def button():
     if request.method == 'GET':
-        return render_template("button.html")
+        return render_template("index.html")
     elif request.method == 'POST':
         return redirect(url_for('success'))
 
@@ -59,7 +59,7 @@ def mongo(data):
 
     db = client[DB_NAME]
 
-    collection = db.test_collection  ### how do i use variable after dot(.)
+    collection = db.data_collection  ### how do i use variable after dot(.)
     document_id = insert_document(collection, data)
 
 if __name__ == '__main__':

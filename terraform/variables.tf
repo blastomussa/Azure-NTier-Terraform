@@ -15,7 +15,7 @@ variable "password" {
 }
 
 variable "resource_group_name" {
-  default = "tfCosmos-RG"
+  default = "AzProject-RG"
 }
 
 variable "resource_group_location" {
@@ -27,19 +27,19 @@ variable "cosmos_db_account_name" {
 }
 
 variable "cosmos_db_database_name" {
-  default = "test-db"
+  default = "mongo-db"
 }
 
 variable "cosmos_db_collection_name" {
-  default = "test_collection"
+  default = "data_collection"
 }
 
 variable "container_registry_name" {
-  default = "testcontainer12359"
+  default = "projregistry10293"
 }
 
 variable "vnet_name" {
-  default = "test-vnet"
+  default = "azproject-vnet"
 }
 
 variable "aci_name" {

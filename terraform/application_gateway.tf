@@ -22,7 +22,7 @@ resource "azurerm_public_ip" "gateway-pip" {
 
 # Create Application Gateway
 resource "azurerm_application_gateway" "gateway" {
-  name                = "test-appgateway"
+  name                = "app-gateway"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
