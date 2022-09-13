@@ -6,7 +6,7 @@ backend, a Flask frontend container instance, an application gateway, a CosmosDB
 MongoDB database and an Azure Container registry.
 
 Container images are built automatically on deployment with an ACR task, which is
-also triggered after every commit to this repositories master branch.
+also triggered after every commit to this repository's master branch.
 
 The goal of this project is to deploy as many resources as possible with terraform.
 
