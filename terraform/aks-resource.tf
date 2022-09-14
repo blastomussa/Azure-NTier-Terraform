@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "api" {
       }
       spec {
         container {
-          image = "testcontainer12359.azurecr.io/backend:ca1" #<<<<<<<<<<<<<<<<<<<-----------THIS NEEDS TO BE DYNAMIC
+          image = "projregistry10293.azurecr.io/backend:ca1" #<<<<<<<<<<<<<<<<<<<-----------THIS NEEDS TO BE DYNAMIC
           name  = "api"
 
           port {

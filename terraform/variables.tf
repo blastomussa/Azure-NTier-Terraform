@@ -41,7 +41,3 @@ variable "container_registry_name" {
 variable "vnet_name" {
   default = "azproject-vnet"
 }
-
-variable "aci_name" {
-  default = "frontend-app"
-}

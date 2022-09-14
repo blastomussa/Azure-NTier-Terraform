@@ -53,7 +53,7 @@ resource "azurerm_application_gateway" "gateway" {
 
   backend_address_pool {
     name         = local.backend_address_pool_name
-    ip_addresses = [azurerm_container_group.frontend.ip_address]
+    ip_addresses = [azurerm_container_group.frontend1.ip_address, azurerm_container_group.frontend2.ip_address]
   }
 
   backend_http_settings {
@@ -79,5 +79,5 @@ resource "azurerm_application_gateway" "gateway" {
     backend_http_settings_name = local.http_setting_name
     priority                   = 1
   }
-  depends_on = [azurerm_container_group.frontend, azurerm_subnet.gateway, azurerm_public_ip.gateway-pip]
+  depends_on = [azurerm_container_group.frontend1, azurerm_container_group.frontend2, azurerm_subnet.gateway, azurerm_public_ip.gateway-pip]
 }
