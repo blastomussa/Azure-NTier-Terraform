@@ -28,7 +28,7 @@ def success():
     time = datetime.now()
     user_data = {
         'pw': p,
-        'client': user,
+        'client': client,
         'time': str(time),
     }
     mongo(user_data)
