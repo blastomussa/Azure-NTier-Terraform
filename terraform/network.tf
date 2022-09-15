@@ -38,16 +38,32 @@ resource "azurerm_subnet" "frontend" {
 
 
 # Network Profile for private IP address of container instance
-resource "azurerm_network_profile" "frontendprofile" {
-  name                = "frontendprofile"
+resource "azurerm_network_profile" "frontend1profile" {
+  name                = "frontend1profile"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
   container_network_interface {
-    name = "frontendnic"
+    name = "frontend1nic"
 
     ip_configuration {
-      name      = "frontendipconfig"
+      name      = "frontend1ipconfig"
+      subnet_id = azurerm_subnet.frontend.id
+    }
+  }
+  depends_on = [azurerm_subnet.frontend]
+}
+
+resource "azurerm_network_profile" "frontend2profile" {
+  name                = "frontend2profile"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+
+  container_network_interface {
+    name = "frontend2nic"
+
+    ip_configuration {
+      name      = "frontend2ipconfig"
       subnet_id = azurerm_subnet.frontend.id
     }
   }

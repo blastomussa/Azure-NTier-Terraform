@@ -43,7 +43,7 @@ variable "vnet_name" {
 }
 
 variable "log_analytics_workspace_name" {
-  default = "jcourtneyloganalytics"  
+  default = "jcourtneyloganalytics"
 }
 
 variable "log_analytics_workspace_sku" {
@@ -52,12 +52,10 @@ variable "log_analytics_workspace_sku" {
 
 # To ensure your cluster operates reliably, you should run at least 2 (two) nodes in the default node pool, 
 # as essential system services are running across this node pool.
-# If you run a single system node pool for your AKS cluster in a production environment, 
-# we recommend you use at least three nodes for the node pool.
- variable "node_count" {
-  default = "2"   
- }
+variable "node_count" {
+  default = "2"
+}
 
- variable "ssh_public_key" {
+variable "ssh_public_key" {
   default = "~/.ssh/id_rsa.pub"
 }

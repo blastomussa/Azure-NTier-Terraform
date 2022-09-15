@@ -4,7 +4,7 @@ resource "azurerm_container_group" "frontend1" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   ip_address_type     = "Private"
-  network_profile_id  = azurerm_network_profile.frontendprofile.id
+  network_profile_id  = azurerm_network_profile.frontend1profile.id
   os_type             = "Linux"
 
   # REQUIRED to access ACR image
@@ -48,7 +48,7 @@ resource "azurerm_container_group" "frontend1" {
       COSMOS_PRIMARY_KEY = azurerm_cosmosdb_account.acc.primary_key
     })
   }
-  depends_on = [azurerm_container_registry_task_schedule_run_now.frontendbuild, azurerm_cosmosdb_account.acc, azurerm_network_profile.frontendprofile, kubernetes_service.api]
+  depends_on = [azurerm_container_registry_task_schedule_run_now.frontendbuild, azurerm_cosmosdb_account.acc, azurerm_network_profile.frontend1profile, kubernetes_service.api]
 }
 
 resource "azurerm_container_group" "frontend2" {
@@ -56,7 +56,7 @@ resource "azurerm_container_group" "frontend2" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   ip_address_type     = "Private"
-  network_profile_id  = azurerm_network_profile.frontendprofile.id
+  network_profile_id  = azurerm_network_profile.frontend2profile.id
   os_type             = "Linux"
 
   # REQUIRED to access ACR image
@@ -100,5 +100,5 @@ resource "azurerm_container_group" "frontend2" {
       COSMOS_PRIMARY_KEY = azurerm_cosmosdb_account.acc.primary_key
     })
   }
-  depends_on = [azurerm_container_registry_task_schedule_run_now.frontendbuild, azurerm_cosmosdb_account.acc, azurerm_network_profile.frontendprofile, kubernetes_service.api]
+  depends_on = [azurerm_container_registry_task_schedule_run_now.frontendbuild, azurerm_cosmosdb_account.acc, azurerm_network_profile.frontend2profile, kubernetes_service.api]
 }

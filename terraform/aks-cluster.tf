@@ -8,7 +8,7 @@ resource "random_id" "log_analytics_workspace_name_suffix" {
 
 # log analytics
 resource "azurerm_log_analytics_workspace" "log" {
-  location            = var.resource_group_location
+  location = var.resource_group_location
   # The WorkSpace name has to be unique across the whole of azure;
   # not just the current subscription/tenant.
   name                = "${var.log_analytics_workspace_name}-${random_id.log_analytics_workspace_name_suffix.dec}"
@@ -17,7 +17,7 @@ resource "azurerm_log_analytics_workspace" "log" {
 }
 
 resource "azurerm_log_analytics_solution" "logsolution" {
-  location              = azurerm_log_analytics_workspace.log .location
+  location              = azurerm_log_analytics_workspace.log.location
   resource_group_name   = azurerm_resource_group.rg.name
   solution_name         = "ContainerInsights"
   workspace_name        = azurerm_log_analytics_workspace.log.name
