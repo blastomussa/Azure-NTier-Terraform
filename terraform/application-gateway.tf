@@ -53,7 +53,7 @@ resource "azurerm_application_gateway" "gateway" {
 
   backend_address_pool {
     name         = local.backend_address_pool_name
-    ip_addresses = [azurerm_container_group.frontend1.ip_address, azurerm_container_group.frontend2.ip_address]
+    ip_addresses = [azurerm_container_group.frontend1.ip_address]
   }
 
   backend_http_settings {

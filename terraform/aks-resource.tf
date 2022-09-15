@@ -43,7 +43,7 @@ resource "kubernetes_deployment" "api" {
       }
     }
   }
-  depends_on = [azurerm_kubernetes_cluster.cluster]
+  depends_on = [azurerm_kubernetes_cluster.k8s]
 }
 
 
