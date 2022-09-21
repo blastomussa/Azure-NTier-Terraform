@@ -35,7 +35,7 @@ variable "cosmos_db_collection_name" {
 }
 
 variable "container_registry_name" {
-  default = "projregistry10293"
+  default = "projregistry5650"
 }
 
 variable "vnet_name" {
