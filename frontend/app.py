@@ -10,6 +10,7 @@ application = app
 
 
 # use getenv to get variables set by terraform to constuct CONNECTION_STRING
+WHICH_APP = getenv('WHICH_APP')
 COSMOS_ACC_NAME = getenv('COSMOS_ACC_NAME')
 PRIMARY_KEY = getenv('COSMOS_PRIMARY_KEY')
 DB_NAME = getenv('COSMOS_DB_NAME')
@@ -38,7 +39,7 @@ def success():
 @app.route('/',methods = ['GET','POST'])
 def button():
     if request.method == 'GET':
-        return render_template("index.html")
+        return render_template("index.html", shortcode=WHICH_APP)
     elif request.method == 'POST':
         return redirect(url_for('success'))
 

@@ -9,14 +9,14 @@ resource "azurerm_container_group" "frontend1" {
 
   # REQUIRED to access ACR image
   image_registry_credential {
-    server   = "projregistry10293.azurecr.io"
+    server   = "${var.container_registry_name}.azurecr.io"
     username = azurerm_container_registry.acr.admin_username
     password = azurerm_container_registry.acr.admin_password
   }
 
   container {
     name   = "frontend-app"
-    image  = "projregistry10293.azurecr.io/frontend:ca2" # THIS NEEDS TO BE DYNAMIC!!!!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FIX THIS
+    image  = "${var.container_registry_name}.azurecr.io/frontend:ca2" 
     cpu    = "0.5"
     memory = "1.5"
 
@@ -43,6 +43,7 @@ resource "azurerm_container_group" "frontend1" {
       COSMOS_DB_NAME   = var.cosmos_db_database_name
       COSMOS_COLL_NAME = var.cosmos_db_collection_name
       API_IP           = kubernetes_service.api.status.0.load_balancer.0.ingress.0.ip
+      WHICH_APP        = "frontend-app1"
     })
     secure_environment_variables = ({
       COSMOS_PRIMARY_KEY = azurerm_cosmosdb_account.acc.primary_key
@@ -61,14 +62,14 @@ resource "azurerm_container_group" "frontend2" {
 
   # REQUIRED to access ACR image
   image_registry_credential {
-    server   = "projregistry10293.azurecr.io"
+    server   = "${var.container_registry_name}.azurecr.io"
     username = azurerm_container_registry.acr.admin_username
     password = azurerm_container_registry.acr.admin_password
   }
 
   container {
     name   = "frontend-app"
-    image  = "projregistry10293.azurecr.io/frontend:ca2" # THIS NEEDS TO BE DYNAMIC!!!!!!<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< FIX THIS
+    image  = "${var.container_registry_name}.azurecr.io/frontend:ca2" 
     cpu    = "0.5"
     memory = "1.5"
 
@@ -95,6 +96,7 @@ resource "azurerm_container_group" "frontend2" {
       COSMOS_DB_NAME   = var.cosmos_db_database_name
       COSMOS_COLL_NAME = var.cosmos_db_collection_name
       API_IP           = kubernetes_service.api.status.0.load_balancer.0.ingress.0.ip
+      WHICH_APP        = "frontend-app2"
     })
     secure_environment_variables = ({
       COSMOS_PRIMARY_KEY = azurerm_cosmosdb_account.acc.primary_key
