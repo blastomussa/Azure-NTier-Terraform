@@ -1,6 +1,6 @@
 # Backend Flask API for AKS deployment
 from generator import Generator
-from flask import Flask, json, jsonify, request, render_template, redirect, url_for
+from flask import Flask, jsonify, request, render_template, redirect, url_for
 
 # initialize flask applications
 app = Flask(__name__)
