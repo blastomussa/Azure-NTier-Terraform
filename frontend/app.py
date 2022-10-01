@@ -2,7 +2,7 @@ import pymongo
 import requests
 from os import getenv
 from datetime import datetime
-from flask import Flask, redirect, url_for, request, render_template, jsonify
+from flask import Flask, redirect, url_for, request, render_template
 
 app = Flask(__name__)
 # this is the entry point for wsgi deployment
