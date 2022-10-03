@@ -15,7 +15,7 @@ COSMOS_ACC_NAME = getenv('COSMOS_ACC_NAME')
 PRIMARY_KEY = getenv('COSMOS_PRIMARY_KEY')
 DB_NAME = getenv('COSMOS_DB_NAME')
 COLLECTION_NAME = getenv('COSMOS_COLL_NAME')
-CONNECTION_STRING = "mongodb://" + str(COSMOS_ACC_NAME) + ":" + str(PRIMARY_KEY) + "@" + str(COSMOS_ACC_NAME) + ".mongo.cosmos.azure.com:10255/?ssl=true\u0026replicaSet=globaldb\u0026retrywrites=false\u0026maxIdleTimeMS=120000\u0026appName=@" + str(COSMOS_ACC_NAME) + "@"
+CONNECTION_STRING = f"mongodb://{COSMOS_ACC_NAME}:{PRIMARY_KEY}@{COSMOS_ACC_NAME}.mongo.cosmos.azure.com:10255/?ssl=true\u0026replicaSet=globaldb\u0026retrywrites=false\u0026maxIdleTimeMS=120000\u0026appName=@{COSMOS_ACC_NAME}@"
 API_IP = getenv('API_IP')
 API_URL = 'http://' + str(API_IP) + '/api/v1'
 
