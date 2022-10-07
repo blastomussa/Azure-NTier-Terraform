@@ -22,7 +22,7 @@ resource "kubernetes_deployment" "api" {
       }
       spec {
         container {
-          image ="${var.container_registry_name}.azurecr.io/backend:ca1"
+          image = "${var.container_registry_name}.azurecr.io/backend:ca1"
           name  = "api"
 
           port {

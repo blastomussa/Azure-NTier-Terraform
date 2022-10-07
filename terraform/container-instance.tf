@@ -16,7 +16,7 @@ resource "azurerm_container_group" "frontend1" {
 
   container {
     name   = "frontend-app"
-    image  = "${var.container_registry_name}.azurecr.io/frontend:ca2" 
+    image  = "${var.container_registry_name}.azurecr.io/frontend:ca2"
     cpu    = "0.5"
     memory = "1.5"
 
@@ -69,7 +69,7 @@ resource "azurerm_container_group" "frontend2" {
 
   container {
     name   = "frontend-app"
-    image  = "${var.container_registry_name}.azurecr.io/frontend:ca2" 
+    image  = "${var.container_registry_name}.azurecr.io/frontend:ca2"
     cpu    = "0.5"
     memory = "1.5"
 
