@@ -1,5 +1,3 @@
-
-
 resource "azurerm_monitor_action_group" "ag" {
   name                = "projectactiongroup"
   resource_group_name = azurerm_resource_group.rg.name
